@@ -242,10 +242,6 @@ public class TraverseBinaryTree {
 
     /**
      * 深度优先-迭代前序遍历：先根节点，然后左子树，最后右子树
-     * 需要先放入 根节点
-     * 然后不断的放入左子节点，直至左子末节点
-     * 然后弹出栈顶的 左子末节点
-     * 继续遍历栈顶节点的右子节点
      * @param root
      */
     public ArrayList<Integer> deepPreOrder(TreeNode root) {
@@ -255,20 +251,29 @@ public class TraverseBinaryTree {
         }
         Stack<TreeNode> stack = new Stack<>();
         TreeNode cur = root;
-        while (cur != null || !stack.isEmpty()) {
+
+        while (cur != null) {
+            result.add(cur.val);
+            stack.push(cur);
+            cur = cur.left;
+        }
+
+        while (!stack.isEmpty()) {
+            cur = stack.pop();
+            cur = cur.right;
             while (cur != null) {
-//                nodeNeedTodo(cur);
+                result.add(cur.val);
                 stack.push(cur);
                 cur = cur.left;
-            }
-            if (!stack.isEmpty()) {
-                cur = stack.pop();
-                cur = cur.right;
             }
         }
         return result;
     }
 
+    /**
+     * 深度优先-迭代前序遍历：先左子树，然后根节点，最后右子树
+     * @param root
+     */
     public ArrayList<Integer> deepInOrder(TreeNode root) {
         ArrayList<Integer> result = new ArrayList<>();
         if (root == null) {
@@ -276,20 +281,28 @@ public class TraverseBinaryTree {
         }
         Stack<TreeNode> stack = new Stack<>();
         TreeNode cur = root;
-        while (cur != null || !stack.isEmpty()) {
+
+        while (cur != null) {
+            stack.push(cur);
+            cur = cur.left;
+        }
+
+        while (!stack.isEmpty()) {
+            cur = stack.pop();
+            result.add(cur.val);
+            cur = cur.right;
             while (cur != null) {
                 stack.push(cur);
                 cur = cur.left;
-            }
-            if (!stack.isEmpty()) {
-                cur = stack.pop();
-//                nodeNeedTodo(cur);
-                cur = cur.right;
             }
         }
         return result;
     }
 
+    /**
+     * 深度优先-迭代前序遍历：先左子树，然后右子树，最后根节点
+     * @param root
+     */
     public ArrayList<Integer> deepPostOrder(TreeNode root) {
         ArrayList<Integer> result = new ArrayList<>();
         if (root == null) {
@@ -297,17 +310,17 @@ public class TraverseBinaryTree {
         }
         Stack<TreeNode> stack = new Stack<>();
         TreeNode cur = root;
-        TreeNode lastVisited = null;
 
         while (null != cur) {
             stack.push(cur);
             cur = cur.left;
         }
 
+        TreeNode lastVisited = null;
         while (!stack.isEmpty()) {
             cur = stack.pop();
             if (cur.right == null || lastVisited == cur.right) {
-//                nodeNeedTodo(cur);
+                result.add(cur.val);
                 lastVisited = cur;
             } else {
                 stack.push(cur);
