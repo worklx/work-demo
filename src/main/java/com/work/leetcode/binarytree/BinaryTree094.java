@@ -24,13 +24,13 @@ import java.util.List;
 
  * @author chenlx2
  */
-public class BinaryTree94 {
+public class BinaryTree094 {
 
     public static void main(String[] args) {
         Integer[] arr = {1,null,2,3};
         TreeNode root = BinaryTreeUtil.arrToTree(arr);
         BinaryTreePrintUtil.print(root);
-        System.out.println(new BinaryTree94().inorderTraversal(root));
+        System.out.println(new BinaryTree094().inorderTraversal(root));
     }
 
     public List<Integer> inorderTraversal(TreeNode root) {

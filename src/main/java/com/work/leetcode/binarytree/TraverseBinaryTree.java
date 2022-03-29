@@ -316,12 +316,12 @@ public class TraverseBinaryTree {
             cur = cur.left;
         }
 
-        TreeNode lastVisited = null;
+        TreeNode lastAdd = null;
         while (!stack.isEmpty()) {
             cur = stack.pop();
-            if (cur.right == null || lastVisited == cur.right) {
+            if (cur.right == null || lastAdd == cur.right) {
                 result.add(cur.val);
-                lastVisited = cur;
+                lastAdd = cur;
             } else {
                 stack.push(cur);
                 cur = cur.right;
@@ -386,9 +386,15 @@ public class TraverseBinaryTree {
         System.out.println();
         System.out.print("深度优先-递归前序遍历结果：" + new TraverseBinaryTree().preOrderReturnResult(root));
         System.out.println();
+        System.out.print("深度优先-迭代前序遍历结果：" + new TraverseBinaryTree().deepPreOrder(root));
+        System.out.println();
         System.out.print("深度优先-递归中序遍历结果：" + new TraverseBinaryTree().inOrderReturnResult(root));
         System.out.println();
+        System.out.print("深度优先-迭代中序遍历结果：" + new TraverseBinaryTree().deepInOrder(root));
+        System.out.println();
         System.out.print("深度优先-递归后序遍历结果：" + new TraverseBinaryTree().postOrderReturnResult(root));
+        System.out.println();
+        System.out.print("深度优先-迭代后序遍历结果：" + new TraverseBinaryTree().deepPostOrder(root));
         System.out.println();
         System.out.print("深度优先-迭代遍历1结果：" + new TraverseBinaryTree().deepOrder1(root));
         System.out.println();
