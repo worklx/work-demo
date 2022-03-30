@@ -22,7 +22,54 @@ package com.work.leetcode.binarytree;
 
 
 public class BinaryTree106 {
+    /**
+     先序遍历：对任一子树，先访问根，然后遍历其左子树，最后遍历其右子树。
+     中序遍历：对任一子树，先遍历其左子树，然后访问根，最后遍历其右子树。
+     后序遍历：对任一子树，先遍历其左子树，然后遍历其右子树，最后访问根。
+
+     若知道后序遍历结果，那么最后一个元素即是根节点
+     若知道根节点和中序遍历结果，那么可以用根节点将中序遍历结果进行拆分
+
+            3
+         /    \
+       9       20
+      / \     / \
+     6   8   15  7
+     inorder = [6, 9, 8, 3, 15, 20, 7]
+     postorder = [6, 8, 9, 15, 7, 20, 3]
+
+     preorder 的第一个元素 3 是根节点的值 rootValue = 3
+     元素 3 在 inorder 中的索引是 3  rootIndex = 3
+     左子树的个数的值等于 rootIndex leftSize = 3
+     右子树的个数的值等于 inorder.size - 1 - rootIndex  rightSize = 3
+     preorder 的 [0 + 1 , leftSize + 1] 范围是 [9,6,8] 是左子树的前序遍历
+     inorder 的 [0, leftSize] 范围是 [6,9,8] 是左子树的中序遍历
+
+     preorder 的 [rootIndex + 1, preorder.length - 1] 范围是 [20,15,7] 是右子树的前序遍历
+     inorder 的 [rootIndex + 1, inorder.length - 1] 范围是 [15,20,7] 是右子树的中序遍历
+     重复上述过程
+     */
     public TreeNode buildTree(int[] inorder, int[] postorder) {
         return null;
+    }
+
+    public static void main(String[] args) {
+        Integer[] arr = {3,9,20,6,8,15,7};
+        TreeNode root = BinaryTreeUtil.arrToTree(arr);
+        BinaryTreePrintUtil.print(root);
+        System.out.println(new TraverseBinaryTree().preOrderReturnResult(root));
+        System.out.println(new TraverseBinaryTree().inOrderReturnResult(root));
+        System.out.println(new TraverseBinaryTree().postOrderReturnResult(root));
+//        int[] preorder = {3, 9, 6, 8, 20, 15, 7};
+//        int[] inorder = {6, 9, 8, 3, 15, 20, 7};
+//        BinaryTreePrintUtil.print(new BinaryTree105().buildTree(preorder, inorder));
+
+//        int[] preorder = {3, 9, 6, 8, 20};
+//        int[] inorder = {6, 9, 8, 3, 20};
+//        BinaryTreePrintUtil.print(new BinaryTree105().buildTree(preorder, inorder));
+
+//        int[] preorder = {3, 9, 20, 15, 7};
+//        int[] inorder = {9, 3, 15, 20, 7};
+//        BinaryTreePrintUtil.print(new BinaryTree105().buildTree(preorder, inorder));
     }
 }
