@@ -24,7 +24,74 @@ package com.work.leetcode.binarytree;
 
 
 public class BinaryTree889 {
+
+    /*
+     * 先序遍历：对任一子树，先访问根，然后遍历其左子树，最后遍历其右子树。
+     * 中序遍历：对任一子树，先遍历其左子树，然后访问根，最后遍历其右子树。
+     * 后序遍历：对任一子树，先遍历其左子树，然后遍历其右子树，最后访问根。
+     *
+              1
+            /   \
+          2       3
+         / \     / \
+        4   5   6   7
+      前序：[1, 2, 4, 5, 3, 6, 7]
+      后序：[4, 5, 2, 6, 7, 3, 1]
+     *
+     * 前序遍历序列：[根节点，[左子树]，[右子树]]
+     * 后序遍历序列：[[左子树]，[右子树]，根节点]
+     *
+     */
+
+    public TreeNode constructFromPrePost(
+            int[] preorder, int[] postorder,
+            int preStart, int preEnd,
+            int postStart, int postEnd) {
+        // 根节点值
+        int rootValue = preorder[preStart];
+        // 根节点索引
+        int rootIndex = preStart;
+        // 计算左子树 leftSize
+        int leftSize = 0;
+        for (int i = postStart; i < postEnd; i++) {
+            if (postorder[i] == preorder[rootIndex + 1]) {
+                leftSize = i - postStart + 1;
+            }
+        }
+        // 构建根节点
+        TreeNode root = new TreeNode(rootValue);
+        // 左子树 preStart
+        int leftPreStart = rootIndex + 1;
+        // 左子树 preEnd
+        int leftPreEnd = leftPreStart + leftSize - 1;
+        // 左子树 postStart
+        int leftPostStart = postStart;
+        // 左子树 postEnd
+        int leftPostEnd = leftPostStart + leftSize - 1;
+        // 构建左子树
+        root.left = constructFromPrePost(preorder, postorder, leftPreStart, leftPreEnd, leftPostStart, leftPostEnd);
+        // 右子树 preStart
+        int rightPreStart = preStart + leftSize + 1;
+        // 右子树 preEnd
+        int rightPreEnd = preEnd;
+        // 右子树 postStart
+        int rightPostStart = postStart + leftSize;
+        // 右子树 postEnd
+        int rightPostEnd = postEnd - 1;
+        // 构建右子树
+        root.right = constructFromPrePost(preorder, postorder, rightPreStart, rightPreEnd, rightPostStart, rightPostEnd);
+        return root;
+    }
+
     public TreeNode constructFromPrePost(int[] preorder, int[] postorder) {
-        return null;
+        return constructFromPrePost(preorder, postorder, 0, preorder.length - 1, 0, postorder.length - 1);
+    }
+
+    public static void main(String[] args) {
+        Integer[] arr = {1,2,3,4,5,6,7};
+        TreeNode root = BinaryTreeUtil.arrToTree(arr);
+        BinaryTreePrintUtil.print(root);
+        System.out.println(new TraverseBinaryTree().preOrderReturnResult(root));
+        System.out.println(new TraverseBinaryTree().postOrderReturnResult(root));
     }
 }

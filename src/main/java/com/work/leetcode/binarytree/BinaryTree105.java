@@ -55,20 +55,53 @@ public class BinaryTree105 {
         for(int i = 0; i < inorder.length; i++) {
             valueIndexMap.put(inorder[i], i);
         }
-        return buildTree(preorder, inorder, 0, preorder.length - 1, 0, inorder.length - 1, valueIndexMap);
+        return buildTree(preorder, inorder,
+                0, preorder.length - 1,
+                0, inorder.length - 1,
+                valueIndexMap);
     }
 
-    public TreeNode buildTree(int[] preorder, int[] inorder, int preLeftIndex, int preRightIndex, int inLeftIndex, int inRightIndex, HashMap<Integer, Integer> valueIndexMap) {
+    public TreeNode buildTree(int[] preorder, int[] inorder,
+                              int preLeftIndex, int preRightIndex,
+                              int inLeftIndex, int inRightIndex,
+                              HashMap<Integer, Integer> valueIndexMap) {
+        if (preLeftIndex > preRightIndex) {
+            return null;
+        }
         // 找到根节点的值
         int rootValue = preorder[preLeftIndex];
         // 找到根节点的索引
         int rootIndex = valueIndexMap.get(rootValue);
+        // 左子树节点数量
+        int leftSize = rootIndex - inLeftIndex;
         // 构建根节点
         TreeNode root = new TreeNode(rootValue);
+        // 左子树前序遍历序列起始索引
+        int leftNextPreLeftIndex = preLeftIndex + 1;
+        // 左子树前序遍历序列结束索引
+        int leftNextPreRightIndex = preLeftIndex + leftSize;
+        // 左子树中序遍历序列起始索引
+        int leftNextInLeftIndex = inLeftIndex;
+        // 左子树中序遍历序列结束索引
+        int leftNextInRightIndex = inLeftIndex + leftSize;
         // 构建左子树
-        root.left = buildTree(preorder, inorder, preLeftIndex + 1, preLeftIndex + 1 + rootIndex - inLeftIndex, inLeftIndex, rootIndex - 1, valueIndexMap);
+        root.left = buildTree(preorder, inorder,
+                leftNextPreLeftIndex, leftNextPreRightIndex,
+                leftNextInLeftIndex, leftNextInRightIndex,
+                valueIndexMap);
+        // 右子树前序遍历序列起始索引
+        int rightNextPreLeftIndex = preLeftIndex + leftSize + 1;
+        // 右子树前序遍历序列结束索引
+        int rightNextPreRightIndex = preRightIndex;
+        // 右子树中序遍历序列起始索引
+        int rightNextInLeftIndex = rootIndex + 1;
+        // 右子树中序遍历序列结束索引
+        int rightNextInRightIndex = inRightIndex;
         // 构建右子树
-        root.right = buildTree(preorder, inorder, rootIndex +1, preRightIndex, rootIndex + 1, inRightIndex, valueIndexMap);
+        root.right = buildTree(preorder, inorder,
+                rightNextPreLeftIndex, rightNextPreRightIndex,
+                rightNextInLeftIndex, rightNextInRightIndex,
+                valueIndexMap);
         return root;
     }
 

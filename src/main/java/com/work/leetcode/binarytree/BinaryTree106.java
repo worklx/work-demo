@@ -21,6 +21,8 @@ package com.work.leetcode.binarytree;
 // postorder 保证是树的后序遍历
 
 
+import java.util.HashMap;
+
 public class BinaryTree106 {
     /**
      先序遍历：对任一子树，先访问根，然后遍历其左子树，最后遍历其右子树。
@@ -50,26 +52,58 @@ public class BinaryTree106 {
      重复上述过程
      */
     public TreeNode buildTree(int[] inorder, int[] postorder) {
-        return null;
+        HashMap<Integer, Integer> valueIndexMap = new HashMap();
+        for(int i = 0; i < inorder.length; i++) {
+            valueIndexMap.put(inorder[i], i);
+        }
+        return buildTree(inorder, postorder,
+                0, inorder.length - 1,
+                0, postorder.length - 1,
+                valueIndexMap);
     }
 
-    public static void main(String[] args) {
-        Integer[] arr = {3,9,20,6,8,15,7};
-        TreeNode root = BinaryTreeUtil.arrToTree(arr);
-        BinaryTreePrintUtil.print(root);
-        System.out.println(new TraverseBinaryTree().preOrderReturnResult(root));
-        System.out.println(new TraverseBinaryTree().inOrderReturnResult(root));
-        System.out.println(new TraverseBinaryTree().postOrderReturnResult(root));
-//        int[] preorder = {3, 9, 6, 8, 20, 15, 7};
-//        int[] inorder = {6, 9, 8, 3, 15, 20, 7};
-//        BinaryTreePrintUtil.print(new BinaryTree105().buildTree(preorder, inorder));
-
-//        int[] preorder = {3, 9, 6, 8, 20};
-//        int[] inorder = {6, 9, 8, 3, 20};
-//        BinaryTreePrintUtil.print(new BinaryTree105().buildTree(preorder, inorder));
-
-//        int[] preorder = {3, 9, 20, 15, 7};
-//        int[] inorder = {9, 3, 15, 20, 7};
-//        BinaryTreePrintUtil.print(new BinaryTree105().buildTree(preorder, inorder));
+    public TreeNode buildTree(int[] inorder, int[] postorder,
+                              int inLeftIndex, int inRightIndex,
+                              int postLeftIndex, int postRightIndex,
+                              HashMap<Integer, Integer> valueIndexMap) {
+        if (inLeftIndex > inRightIndex) {
+            return null;
+        }
+        // 找到根节点的值
+        int rootValue = postorder[postRightIndex];
+        // 找到根节点的索引
+        int rootIndex = valueIndexMap.get(rootValue);
+        // 左子树节点数量
+        int leftSize = rootIndex - inLeftIndex;
+        // 构建根节点
+        TreeNode root = new TreeNode(rootValue);
+        // 左子树中序遍历序列起始索引
+        int leftNextInLeftIndex = inLeftIndex;
+        // 左子树中序遍历序列结束索引
+        int leftNextInRightIndex = inLeftIndex + leftSize - 1;
+        // 左子树后序遍历序列起始索引
+        int leftNextPostLeftIndex = postLeftIndex;
+        // 左子树后序遍历序列结束索引
+        int leftNextPostRightIndex = postLeftIndex + leftSize - 1;
+        // 构建左子树
+        root.left = buildTree(inorder, postorder,
+                leftNextInLeftIndex, leftNextInRightIndex,
+                leftNextPostLeftIndex, leftNextPostRightIndex,
+                valueIndexMap);
+        // 右子树中序遍历序列起始索引
+        int rightNextInLeftIndex = rootIndex + 1;
+        // 右子树中序遍历序列结束索引
+        int rightNextInRightIndex = inRightIndex;
+        // 右子树后序遍历序列起始索引
+        int rightNextPostLeftIndex = postLeftIndex + leftSize;
+        // 右子树后序遍历序列结束索引
+        int rightNextPostRightIndex = postRightIndex - 1;
+        // 构建右子树
+        root.right = buildTree(inorder, postorder,
+                rightNextInLeftIndex, rightNextInRightIndex,
+                rightNextPostLeftIndex, rightNextPostRightIndex,
+                valueIndexMap);
+        return root;
     }
+
 }
