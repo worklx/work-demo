@@ -18,7 +18,6 @@ package com.work.leetcode.binarytree;
 
 
 public class BinaryTree543 {
-    Integer maxLength;
     /**
      * 二叉树的直径
      * 需要分别计算每棵子树的二叉树的直径，然后比较大小，取最大值
@@ -30,8 +29,9 @@ public class BinaryTree543 {
      * @param root
      * @return
      */
+    int maxLength;
     public int diameterOfBinaryTree(TreeNode root) {
-        maxLength = Integer.valueOf(0);
+        maxLength = 0;
         dept(root);
         return maxLength;
     }
